@@ -1,0 +1,97 @@
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and customize for your deployment
+# cp terraform.tfvars.example terraform.tfvars
+
+##############################################################################
+# General Configuration
+##############################################################################
+
+aws_region   = "us-east-1"
+project_name = "bedrock-agentcore-ts"
+environment  = "dev"
+
+##############################################################################
+# Bedrock Agent Configuration
+##############################################################################
+
+agent_name        = "typescript-bedrock-agent"
+agent_alias_name  = "dev"
+agent_description = "TypeScript-based AI agent for development environment"
+
+# Customize your agent's behavior with instructions
+agent_instruction = <<-EOT
+  You are a helpful AI assistant that provides information about AWS services and cloud computing.
+  You should be concise, accurate, and provide practical examples when helpful.
+  If you don't know something, say so rather than making up information.
+  Always maintain a professional and friendly tone.
+EOT
+
+##############################################################################
+# Foundation Model Configuration
+##############################################################################
+
+# Available models (uncomment one):
+# Claude 3 Sonnet (balanced performance and cost)
+foundation_model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
+
+# Claude 3 Haiku (fast and cost-effective)
+# foundation_model_id = "anthropic.claude-3-haiku-20240307-v1:0"
+
+# Claude 3 Opus (most capable, higher cost)
+# foundation_model_id = "anthropic.claude-3-opus-20240229-v1:0"
+
+# Claude 3.5 Sonnet (latest, best performance)
+# foundation_model_id = "anthropic.claude-3-5-sonnet-20240620-v1:0"
+
+##############################################################################
+# Inference Configuration (Advanced)
+##############################################################################
+
+# Set to true to enable fine-tuned control over model inference
+enable_prompt_override = false
+
+# Temperature: Controls randomness (0.0 = deterministic, 1.0 = creative)
+inference_temperature = 0.7
+
+# Top P: Nucleus sampling parameter
+inference_top_p = 0.9
+
+# Top K: Limits vocabulary to top K tokens
+inference_top_k = 250
+
+# Max Length: Maximum response length
+inference_max_length = 2048
+
+# Stop Sequences: Optional sequences that stop generation
+inference_stop_sequences = []
+
+##############################################################################
+# Session Configuration
+##############################################################################
+
+# Idle session timeout in seconds (60 to 3600)
+idle_session_ttl = 600  # 10 minutes
+
+##############################################################################
+# CloudWatch Configuration
+##############################################################################
+
+# Log retention in days
+log_retention_days = 7
+
+##############################################################################
+# Optional: KMS Encryption
+##############################################################################
+
+# Uncomment to use customer-managed KMS key for encryption
+# kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+
+##############################################################################
+# Additional Tags
+##############################################################################
+
+additional_tags = {
+  Team        = "Engineering"
+  CostCenter  = "AI-Development"
+  Application = "Bedrock-Agent"
+}
