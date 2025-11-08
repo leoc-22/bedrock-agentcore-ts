@@ -8,6 +8,10 @@
     "build": "tsc",
     "start": "node dist/examples/simple-agent.js",
     "dev": "ts-node src/examples/simple-agent.ts",
+    "test": "npx ts-node src/test-connection.ts",
+    "chat": "npx ts-node src/examples/interactive-cli.ts",
+    "stream": "npx ts-node src/examples/streaming-agent.ts",
+    "session": "npx ts-node src/examples/session-state-agent.ts",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean"
   },

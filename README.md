@@ -73,17 +73,27 @@ const response = await agent.invoke({
 console.log(response.completion);
 ```
 
+### Test Your Setup
+
+```bash
+# Test AWS connection and credentials
+npm test
+```
+
 ### Run Examples
 
 ```bash
 # Simple agent example
 npm run dev
 
+# Interactive chat CLI (recommended for local testing)
+npm run chat
+
 # Streaming example
-npx ts-node src/examples/streaming-agent.ts
+npm run stream
 
 # Session state example
-npx ts-node src/examples/session-state-agent.ts
+npm run session
 ```
 
 ## Project Structure
@@ -91,22 +101,77 @@ npx ts-node src/examples/session-state-agent.ts
 ```
 bedrock-agentcore-ts/
 ├── src/
-│   ├── agent-runtime.ts      # Main agent runtime implementation
+│   ├── agent-runtime.ts       # Main agent runtime implementation
 │   ├── types.ts               # TypeScript type definitions
 │   ├── index.ts               # Public API exports
+│   ├── test-connection.ts     # Connection test script
 │   └── examples/
-│       ├── simple-agent.ts    # Basic usage example
-│       ├── streaming-agent.ts # Streaming responses example
-│       └── session-state-agent.ts # Session management example
+│       ├── simple-agent.ts           # Basic usage example
+│       ├── streaming-agent.ts        # Streaming responses example
+│       ├── session-state-agent.ts    # Session management example
+│       └── interactive-cli.ts        # Interactive chat CLI
 ├── dist/                      # Compiled JavaScript output
+├── LOCAL_TESTING.md           # Local testing guide
 ├── DEPLOYMENT_GUIDE.md        # Comprehensive deployment guide
 ├── package.json
 ├── tsconfig.json
 └── README.md
 ```
 
+## Local Testing
+
+Testing your agent locally while connecting to AWS Bedrock is straightforward:
+
+### 1. Quick Connection Test
+
+Verify your AWS credentials and agent configuration:
+
+```bash
+npm test
+```
+
+This will:
+- Check environment variables
+- Verify AWS credentials
+- Test connection to your Bedrock agent
+- Display helpful error messages if something is wrong
+
+### 2. Interactive Chat CLI
+
+The best way to test locally is using the interactive CLI:
+
+```bash
+npm run chat
+```
+
+Features:
+- Real-time chat interface
+- Conversation history
+- Session management
+- Built-in commands (`/help`, `/reset`, `/history`, etc.)
+
+### 3. Available npm Scripts
+
+```bash
+npm test      # Connection test
+npm run dev   # Simple agent example
+npm run chat  # Interactive CLI (recommended)
+npm run stream # Streaming example
+npm run session # Session state example
+```
+
+### 4. Detailed Testing Guide
+
+For comprehensive local testing instructions, see **[LOCAL_TESTING.md](LOCAL_TESTING.md)**, which covers:
+- AWS credential setup
+- Environment configuration
+- Common testing scenarios
+- Troubleshooting tips
+- Development workflows
+
 ## Documentation
 
+- **[Local Testing Guide](LOCAL_TESTING.md)**: Complete guide for testing locally while connecting to AWS Bedrock
 - **[Deployment Guide](DEPLOYMENT_GUIDE.md)**: Comprehensive guide for setting up AWS, local development, and production deployment
 - **[Examples](src/examples/)**: Working examples for common use cases
 
