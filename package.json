@@ -1,0 +1,33 @@
+{
+  "name": "bedrock-agentcore-ts",
+  "version": "1.0.0",
+  "description": "TypeScript implementation for AWS Bedrock AgentCore Runtime",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/examples/simple-agent.js",
+    "dev": "ts-node src/examples/simple-agent.ts",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean"
+  },
+  "keywords": [
+    "aws",
+    "bedrock",
+    "agentcore",
+    "ai",
+    "agent",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-agent-runtime": "^3.662.0",
+    "@aws-sdk/credential-providers": "^3.662.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
