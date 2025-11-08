@@ -1,0 +1,30 @@
+{
+  "name": "bedrock-agentcore-ts",
+  "version": "0.2.0",
+  "description": "TypeScript tooling to provision AWS Bedrock AgentCore agents.",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "deploy": "node dist/cli.js"
+  },
+  "keywords": [
+    "aws",
+    "bedrock",
+    "agentcore",
+    "typescript",
+    "agents"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-agent": "^3.687.0",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.5"
+  }
+}
