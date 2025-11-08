@@ -9,12 +9,7 @@ import {
   InvokeAgentCommandOutput,
 } from '@aws-sdk/client-bedrock-agent-runtime';
 import { fromEnv, fromIni } from '@aws-sdk/credential-providers';
-import {
-  AgentConfig,
-  AgentResponse,
-  InvokeAgentRequest,
-  StreamChunk,
-} from './types';
+import { AgentConfig, AgentResponse, InvokeAgentRequest, StreamChunk } from './types';
 
 export class BedrockAgentRuntime {
   private client: BedrockAgentRuntimeClient;
@@ -77,9 +72,7 @@ export class BedrockAgentRuntime {
   /**
    * Process the streaming response from the agent
    */
-  private async processResponse(
-    response: InvokeAgentCommandOutput
-  ): Promise<AgentResponse> {
+  private async processResponse(response: InvokeAgentCommandOutput): Promise<AgentResponse> {
     let completion = '';
     const traces: any[] = [];
     const citations: any[] = [];
@@ -102,12 +95,12 @@ export class BedrockAgentRuntime {
         traces.push(event.trace);
       }
 
-      if (event.metadata) {
+      if ('metadata' in event && event.metadata) {
         // Handle metadata events
         console.log('Metadata:', event.metadata);
       }
 
-      if (event.citation) {
+      if ('citation' in event && event.citation) {
         citations.push(event.citation);
       }
     }
@@ -123,9 +116,7 @@ export class BedrockAgentRuntime {
   /**
    * Invoke the agent with streaming response
    */
-  async *invokeStream(
-    request: InvokeAgentRequest
-  ): AsyncGenerator<StreamChunk, void, unknown> {
+  async *invokeStream(request: InvokeAgentRequest): AsyncGenerator<StreamChunk, void, unknown> {
     const input: InvokeAgentCommandInput = {
       agentId: this.config.agentId,
       agentAliasId: this.config.agentAliasId,
@@ -170,7 +161,7 @@ export class BedrockAgentRuntime {
           };
         }
 
-        if (event.metadata) {
+        if ('metadata' in event && event.metadata) {
           yield {
             type: 'metadata',
             data: event.metadata,

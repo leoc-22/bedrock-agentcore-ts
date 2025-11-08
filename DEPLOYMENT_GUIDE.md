@@ -34,11 +34,7 @@ Your AWS IAM user/role needs the following permissions:
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "bedrock:InvokeAgent",
-        "bedrock:GetAgent",
-        "bedrock:ListAgents"
-      ],
+      "Action": ["bedrock:InvokeAgent", "bedrock:GetAgent", "bedrock:ListAgents"],
       "Resource": "*"
     }
   ]
@@ -57,6 +53,7 @@ Your AWS IAM user/role needs the following permissions:
    - Select "Agents" from the left sidebar
 
 2. **Create a New Agent**
+
    ```
    - Click "Create Agent"
    - Agent name: my-typescript-agent
@@ -84,6 +81,7 @@ Your AWS IAM user/role needs the following permissions:
    - Connect to Lambda functions or API endpoints
 
 6. **Create Agent Alias**
+
    ```
    - Click "Create Alias"
    - Alias name: prod (or dev, test, etc.)
@@ -191,7 +189,7 @@ const config: AgentConfig = {
   agentId: process.env.BEDROCK_AGENT_ID!,
   agentAliasId: process.env.BEDROCK_AGENT_ALIAS_ID!,
   region: 'us-east-1',
-  enableTrace: false,  // Set to true for debugging
+  enableTrace: false, // Set to true for debugging
 };
 
 const agent = new BedrockAgentRuntime(config);
@@ -204,8 +202,8 @@ const config: AgentConfig = {
   agentId: process.env.BEDROCK_AGENT_ID!,
   agentAliasId: process.env.BEDROCK_AGENT_ALIAS_ID!,
   region: process.env.AWS_REGION || 'us-east-1',
-  sessionId: 'custom-session-id',  // Optional: Use specific session
-  enableTrace: true,  // Enable trace for debugging
+  sessionId: 'custom-session-id', // Optional: Use specific session
+  enableTrace: true, // Enable trace for debugging
 };
 ```
 
@@ -438,6 +436,7 @@ serverless deploy
 **Error**: `UnrecognizedClientException` or `InvalidSignatureException`
 
 **Solution**:
+
 - Verify AWS credentials are correctly configured
 - Check IAM permissions include `bedrock:InvokeAgent`
 - Ensure credentials haven't expired
@@ -452,6 +451,7 @@ aws sts get-caller-identity
 **Error**: `ResourceNotFoundException: Agent not found`
 
 **Solution**:
+
 - Verify `BEDROCK_AGENT_ID` is correct
 - Ensure agent exists in the correct AWS region
 - Check agent alias is created and active
@@ -466,6 +466,7 @@ aws bedrock-agent list-agents --region us-east-1
 **Error**: Agent not accessible
 
 **Solution**:
+
 - Ensure the region in your config matches where the agent was created
 - Bedrock Agents may not be available in all regions
 
@@ -474,6 +475,7 @@ aws bedrock-agent list-agents --region us-east-1
 **Error**: `Cannot find module '@aws-sdk/client-bedrock-agent-runtime'`
 
 **Solution**:
+
 ```bash
 rm -rf node_modules package-lock.json
 npm install
@@ -482,6 +484,7 @@ npm install
 #### 5. TypeScript Compilation Errors
 
 **Solution**:
+
 ```bash
 npm run clean
 npm run build
@@ -496,7 +499,7 @@ const config: AgentConfig = {
   agentId: process.env.BEDROCK_AGENT_ID!,
   agentAliasId: process.env.BEDROCK_AGENT_ALIAS_ID!,
   region: 'us-east-1',
-  enableTrace: true,  // Enable debugging
+  enableTrace: true, // Enable debugging
 };
 ```
 
@@ -593,6 +596,7 @@ try {
 ## Support
 
 For issues and questions:
+
 - Check the troubleshooting section above
 - Review AWS Bedrock documentation
 - Check AWS Service Health Dashboard

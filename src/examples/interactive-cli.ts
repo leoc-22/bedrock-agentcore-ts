@@ -74,9 +74,15 @@ class InteractiveCLI {
    * Print welcome message
    */
   private printWelcome() {
-    console.log(`\n${colors.bright}${colors.cyan}═══════════════════════════════════════════════════════════${colors.reset}`);
-    console.log(`${colors.bright}${colors.cyan}  AWS Bedrock Agent - Interactive CLI${colors.reset}`);
-    console.log(`${colors.bright}${colors.cyan}═══════════════════════════════════════════════════════════${colors.reset}\n`);
+    console.log(
+      `\n${colors.bright}${colors.cyan}═══════════════════════════════════════════════════════════${colors.reset}`
+    );
+    console.log(
+      `${colors.bright}${colors.cyan}  AWS Bedrock Agent - Interactive CLI${colors.reset}`
+    );
+    console.log(
+      `${colors.bright}${colors.cyan}═══════════════════════════════════════════════════════════${colors.reset}\n`
+    );
 
     console.log(`${colors.gray}Session ID: ${this.agent.getSessionId()}${colors.reset}`);
     console.log(`${colors.gray}Region: ${process.env.AWS_REGION || 'us-east-1'}${colors.reset}\n`);
@@ -88,7 +94,9 @@ class InteractiveCLI {
     console.log(`  ${colors.cyan}/clear${colors.reset}     - Clear the screen`);
     console.log(`  ${colors.cyan}/stream${colors.reset}    - Toggle streaming mode`);
     console.log(`  ${colors.cyan}/exit${colors.reset}      - Exit the CLI`);
-    console.log(`\n${colors.gray}Type your message and press Enter to chat with your agent.${colors.reset}\n`);
+    console.log(
+      `\n${colors.gray}Type your message and press Enter to chat with your agent.${colors.reset}\n`
+    );
   }
 
   /**
@@ -133,7 +141,9 @@ class InteractiveCLI {
       console.error(`${colors.red}Error: ${error.message}${colors.reset}\n`);
 
       if (error.name === 'ThrottlingException') {
-        console.log(`${colors.yellow}Tip: You may be sending requests too quickly. Wait a moment and try again.${colors.reset}\n`);
+        console.log(
+          `${colors.yellow}Tip: You may be sending requests too quickly. Wait a moment and try again.${colors.reset}\n`
+        );
       }
     }
   }
@@ -166,8 +176,12 @@ class InteractiveCLI {
         break;
 
       case '/stream':
-        console.log(`${colors.yellow}Streaming mode is not yet implemented in this CLI.${colors.reset}`);
-        console.log(`${colors.gray}Use src/examples/streaming-agent.ts for streaming examples.${colors.reset}\n`);
+        console.log(
+          `${colors.yellow}Streaming mode is not yet implemented in this CLI.${colors.reset}`
+        );
+        console.log(
+          `${colors.gray}Use src/examples/streaming-agent.ts for streaming examples.${colors.reset}\n`
+        );
         break;
 
       case '/exit':
@@ -187,7 +201,9 @@ class InteractiveCLI {
   private showHelp() {
     console.log(`\n${colors.bright}Available Commands:${colors.reset}\n`);
     console.log(`  ${colors.cyan}/help${colors.reset}      - Show this help message`);
-    console.log(`  ${colors.cyan}/reset${colors.reset}     - Start a new session (clears conversation history)`);
+    console.log(
+      `  ${colors.cyan}/reset${colors.reset}     - Start a new session (clears conversation history)`
+    );
     console.log(`  ${colors.cyan}/history${colors.reset}   - Display the conversation history`);
     console.log(`  ${colors.cyan}/clear${colors.reset}     - Clear the terminal screen`);
     console.log(`  ${colors.cyan}/stream${colors.reset}    - Toggle streaming mode (coming soon)`);
@@ -208,7 +224,7 @@ class InteractiveCLI {
     }
 
     console.log(`\n${colors.bright}Conversation History:${colors.reset}\n`);
-    this.conversationHistory.forEach((entry, index) => {
+    this.conversationHistory.forEach((entry) => {
       const color = entry.role === 'user' ? colors.green : colors.blue;
       const label = entry.role === 'user' ? 'You' : 'Agent';
       console.log(`${color}${label}:${colors.reset} ${entry.message}\n`);

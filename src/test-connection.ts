@@ -72,7 +72,7 @@ async function testConnection() {
   if (missingVars.length > 0) {
     console.log(`\n${colors.red}Missing required environment variables!${colors.reset}`);
     console.log('\nPlease set the following in your .env file:');
-    missingVars.forEach(v => console.log(`  - ${v}`));
+    missingVars.forEach((v) => console.log(`  - ${v}`));
     console.log('\nSee .env.example for reference.\n');
     process.exit(1);
   }

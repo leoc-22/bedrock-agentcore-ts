@@ -139,6 +139,7 @@ npm test
 ```
 
 This will:
+
 - Check environment variables
 - Verify AWS credentials
 - Test connection to your Bedrock agent
@@ -153,6 +154,7 @@ npm run chat
 ```
 
 Features:
+
 - Real-time chat interface
 - Conversation history
 - Session management
@@ -171,6 +173,7 @@ npm run session # Session state example
 ### 4. Detailed Testing Guide
 
 For comprehensive local testing instructions, see **[LOCAL_TESTING.md](LOCAL_TESTING.md)**, which covers:
+
 - AWS credential setup
 - Environment configuration
 - Common testing scenarios
@@ -242,6 +245,7 @@ terraform apply
 ```
 
 The Terraform configuration deploys:
+
 - ✅ Bedrock Agent with foundation model
 - ✅ Agent Alias for environment management
 - ✅ IAM roles and policies
@@ -269,6 +273,7 @@ npm test
 ```
 
 See **[terraform/README.md](terraform/README.md)** for complete Terraform documentation including:
+
 - Multiple environment management (dev/staging/prod)
 - Remote state configuration
 - Advanced customization
@@ -358,6 +363,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For questions and support:
+
 - Check the [Deployment Guide](DEPLOYMENT_GUIDE.md)
 - Review [Examples](src/examples/)
 - Open an issue on GitHub

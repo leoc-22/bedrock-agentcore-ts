@@ -19,6 +19,7 @@ Before you start local testing:
 ### Option A: Using AWS CLI Profile (Recommended for Local Testing)
 
 1. **Install AWS CLI** (if not already installed):
+
 ```bash
 # macOS
 brew install awscli
@@ -33,6 +34,7 @@ sudo ./aws/install
 ```
 
 2. **Configure AWS CLI**:
+
 ```bash
 aws configure
 
@@ -44,6 +46,7 @@ aws configure
 ```
 
 3. **Verify configuration**:
+
 ```bash
 # Test credentials
 aws sts get-caller-identity
@@ -81,11 +84,13 @@ aws sso login --profile your-profile-name
 ## Step 2: Configure Environment Variables
 
 1. **Copy the example environment file**:
+
 ```bash
 cp .env.example .env
 ```
 
 2. **Edit `.env` file** with your agent details:
+
 ```bash
 # Required: Your Bedrock Agent configuration
 BEDROCK_AGENT_ID=XXXXXXXXXX
@@ -108,6 +113,7 @@ AWS_REGION=us-east-1
    - **Alias ID**: Go to "Aliases" tab → Click on your alias
 
    **Via AWS CLI:**
+
    ```bash
    # List all agents
    aws bedrock-agent list-agents --region us-east-1
@@ -311,7 +317,7 @@ const agent = new BedrockAgentRuntime({
   agentId: process.env.BEDROCK_AGENT_ID!,
   agentAliasId: process.env.BEDROCK_AGENT_ALIAS_ID!,
   region: 'us-east-1',
-  enableTrace: true,  // Enable trace logs
+  enableTrace: true, // Enable trace logs
 });
 
 const response = await agent.invoke({
@@ -334,6 +340,7 @@ if (response.trace) {
 **Problem:** AWS credentials are invalid or not found.
 
 **Solution:**
+
 ```bash
 # Verify credentials are set
 aws sts get-caller-identity
@@ -350,6 +357,7 @@ aws configure
 **Problem:** Agent ID or Alias ID is incorrect, or agent is in a different region.
 
 **Solution:**
+
 ```bash
 # Verify agent exists
 aws bedrock-agent get-agent --agent-id YOUR_AGENT_ID --region us-east-1
@@ -366,6 +374,7 @@ cat .env
 **Problem:** Your IAM user/role lacks permissions.
 
 **Solution:**
+
 ```bash
 # Check current user's permissions
 aws iam get-user
@@ -392,6 +401,7 @@ aws iam get-user
 **Problem:** Network issues or region mismatch.
 
 **Solution:**
+
 ```bash
 # Check region matches where agent was created
 # Update .env:
@@ -406,6 +416,7 @@ ping bedrock-agent-runtime.us-east-1.amazonaws.com
 **Problem:** Dependencies not installed or build needed.
 
 **Solution:**
+
 ```bash
 # Clean install
 rm -rf node_modules package-lock.json
@@ -422,11 +433,13 @@ npm run build
 ### Recommended Workflow for Local Testing
 
 1. **Start with simple test**:
+
    ```bash
    npx ts-node test-connection.ts
    ```
 
 2. **Test specific features**:
+
    ```bash
    npx ts-node src/examples/simple-agent.ts
    ```
@@ -461,6 +474,7 @@ nodemon --watch src --exec "npx ts-node src/examples/simple-agent.ts"
 ### 1. Use Environment-Specific Aliases
 
 Create different agent aliases for different environments:
+
 - `dev` - For local development
 - `test` - For testing
 - `prod` - For production
@@ -500,6 +514,7 @@ console.log('Session ID:', response.sessionId);
 ### 5. Monitor Costs
 
 Local testing uses real AWS resources and incurs costs:
+
 - Set up AWS billing alerts
 - Use CloudWatch to monitor usage
 - Consider using smaller/cheaper models during development
