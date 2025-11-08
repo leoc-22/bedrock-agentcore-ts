@@ -25,7 +25,7 @@ This project provides a complete TypeScript SDK for AWS Bedrock AgentCore Runtim
 
 ### Prerequisites
 
-- Node.js 18.x or higher
+- Node.js 22.x or higher
 - AWS Account with Bedrock access
 - AWS credentials configured
 

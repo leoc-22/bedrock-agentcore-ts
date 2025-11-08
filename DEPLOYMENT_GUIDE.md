@@ -19,7 +19,7 @@ This comprehensive guide walks you through setting up, configuring, and deployin
 
 ### Required Software
 
-- **Node.js**: Version 18.x or higher
+- **Node.js**: Version 22.x or higher
 - **npm**: Version 9.x or higher (comes with Node.js)
 - **AWS Account**: Active AWS account with billing enabled
 - **AWS CLI**: Version 2.x (optional but recommended)
@@ -316,7 +316,7 @@ export const handler = async (event: any) => {
 ```bash
 aws lambda create-function \
   --function-name bedrock-agent-ts \
-  --runtime nodejs18.x \
+  --runtime nodejs22.x \
   --handler dist/lambda.handler \
   --zip-file fileb://function.zip \
   --role arn:aws:iam::YOUR_ACCOUNT:role/lambda-bedrock-role \
@@ -328,7 +328,7 @@ aws lambda create-function \
 1. **Create Dockerfile**:
 
 ```dockerfile
-FROM node:18-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
@@ -365,7 +365,7 @@ docker push YOUR_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/bedrock-agent-ts:latest
 
 ```bash
 # Install Node.js
-curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+curl -fsSL https://rpm.nodesource.com/setup_22.x | sudo bash -
 sudo yum install -y nodejs
 
 # Clone and setup
@@ -396,7 +396,7 @@ service: bedrock-agent-ts
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs22.x
   region: us-east-1
   environment:
     BEDROCK_AGENT_ID: ${env:BEDROCK_AGENT_ID}
