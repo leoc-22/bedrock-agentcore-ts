@@ -110,9 +110,17 @@ bedrock-agentcore-ts/
 │       ├── streaming-agent.ts        # Streaming responses example
 │       ├── session-state-agent.ts    # Session management example
 │       └── interactive-cli.ts        # Interactive chat CLI
+├── terraform/                 # Infrastructure as Code
+│   ├── main.tf                # Main Terraform configuration
+│   ├── variables.tf           # Variable definitions
+│   ├── outputs.tf             # Output values
+│   ├── environments/          # Environment-specific configs
+│   │   ├── dev.tfvars
+│   │   └── prod.tfvars
+│   └── README.md              # Terraform documentation
 ├── dist/                      # Compiled JavaScript output
 ├── LOCAL_TESTING.md           # Local testing guide
-├── DEPLOYMENT_GUIDE.md        # Comprehensive deployment guide
+├── DEPLOYMENT_GUIDE.md        # Manual deployment guide
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -171,8 +179,9 @@ For comprehensive local testing instructions, see **[LOCAL_TESTING.md](LOCAL_TES
 
 ## Documentation
 
+- **[Terraform Infrastructure Guide](terraform/README.md)**: Complete Terraform documentation for infrastructure as code deployment (recommended)
 - **[Local Testing Guide](LOCAL_TESTING.md)**: Complete guide for testing locally while connecting to AWS Bedrock
-- **[Deployment Guide](DEPLOYMENT_GUIDE.md)**: Comprehensive guide for setting up AWS, local development, and production deployment
+- **[Deployment Guide](DEPLOYMENT_GUIDE.md)**: Comprehensive guide for manual deployment to AWS services
 - **[Examples](src/examples/)**: Working examples for common use cases
 
 ## API Reference
@@ -222,14 +231,59 @@ interface AgentResponse {
 
 ## Deployment
 
-This project supports multiple deployment options:
+### Infrastructure as Code with Terraform (Recommended)
+
+Deploy your Bedrock Agent infrastructure with zero click-ops:
+
+```bash
+cd terraform
+terraform init
+terraform apply
+```
+
+The Terraform configuration deploys:
+- ✅ Bedrock Agent with foundation model
+- ✅ Agent Alias for environment management
+- ✅ IAM roles and policies
+- ✅ CloudWatch log groups
+- ✅ Automatic agent preparation
+
+**Quick Start:**
+
+```bash
+# 1. Create your configuration
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+
+# 2. Edit terraform.tfvars with your preferences
+# 3. Deploy
+terraform init
+terraform apply
+
+# 4. Get your agent IDs
+terraform output -raw env_file_content >> ../.env
+
+# 5. Test your agent
+cd ..
+npm test
+```
+
+See **[terraform/README.md](terraform/README.md)** for complete Terraform documentation including:
+- Multiple environment management (dev/staging/prod)
+- Remote state configuration
+- Advanced customization
+- CI/CD integration
+
+### Manual Deployment Options
+
+This project also supports traditional deployment methods:
 
 - **AWS Lambda**: Serverless function invocation
 - **AWS ECS/Fargate**: Containerized deployment
 - **AWS EC2**: Traditional server deployment
 - **Serverless Framework**: Infrastructure as code
 
-See the [Deployment Guide](DEPLOYMENT_GUIDE.md) for detailed instructions.
+See the [Deployment Guide](DEPLOYMENT_GUIDE.md) for manual deployment instructions.
 
 ## Examples
 
