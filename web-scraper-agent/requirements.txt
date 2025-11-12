@@ -2,6 +2,7 @@
 strands-agents>=0.2.0
 strands-agents-tools>=0.2.0
 bedrock-agentcore>=0.1.0
+bedrock-agentcore-starter-toolkit>=0.1.0  # CLI toolkit for deployment
 
 # AWS SDK
 boto3>=1.34.0

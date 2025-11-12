@@ -29,6 +29,50 @@ Custom Extraction Tools
 Structured Business Data
 ```
 
+## Deployment Options
+
+This project provides **two deployment modes**:
+
+### 1. Local Execution (`agent.py`)
+- **Use case**: Quick testing, development, and experimentation
+- **Runs on**: Your local machine
+- **Scaling**: Single instance only
+- **Cost**: Pay only for Bedrock API calls (browser sessions + Claude invocations)
+
+```bash
+python agent.py
+```
+
+### 2. AgentCore Runtime Deployment (`runtime_agent.py`)
+- **Use case**: Production deployments, scalable applications, API endpoints
+- **Runs on**: AWS Bedrock AgentCore Runtime (fully managed, serverless)
+- **Scaling**: Auto-scales to handle thousands of concurrent requests
+- **Cost**: Runtime hosting + Bedrock API calls
+- **Features**: Built-in monitoring, logging, session management, IAM integration
+
+Uses the `@app.entrypoint` decorator pattern:
+
+```python
+from bedrock_agentcore import BedrockAgentCoreApp
+
+app = BedrockAgentCoreApp()
+
+@app.entrypoint
+def scrape_business_handler(payload: Dict) -> Dict:
+    # Your agent logic here
+    pass
+```
+
+Deploy using the CLI toolkit:
+
+```bash
+agentcore configure
+agentcore launch --entrypoint runtime_agent.py
+agentcore invoke --payload '{"website": "https://example.com.au"}'
+```
+
+**Recommendation**: Start with local execution for testing, then deploy to Runtime for production.
+
 ## Prerequisites
 
 ### AWS Requirements
@@ -112,7 +156,9 @@ Structured Business Data
 
 ## Usage
 
-### Basic Usage
+### Option 1: Local Execution (Quick Start)
+
+#### Basic Usage
 
 Run the agent with interactive prompt:
 
@@ -122,13 +168,98 @@ python agent.py
 
 You'll be prompted to enter a business website URL.
 
-### With Environment Variable
+#### With Environment Variable
 
 Set the target website in `.env`:
 
 ```bash
 TARGET_WEBSITE=https://example.com.au
 python agent.py
+```
+
+### Option 2: AgentCore Runtime Deployment (Production)
+
+#### Step 1: Configure AgentCore
+
+```bash
+agentcore configure
+```
+
+This will prompt you for:
+- AWS Region (e.g., us-west-2)
+- IAM Role ARN for the runtime
+- CloudWatch log group (optional)
+
+#### Step 2: Deploy the Agent
+
+```bash
+agentcore launch --entrypoint runtime_agent.py --runtime-name business-scraper
+```
+
+This creates a managed runtime instance in AWS. The deployment process:
+1. Packages your code and dependencies
+2. Creates the runtime environment
+3. Returns a runtime ID for invocation
+
+#### Step 3: Invoke the Agent
+
+**Synchronous invocation**:
+
+```bash
+agentcore invoke \
+  --runtime-name business-scraper \
+  --payload '{"website": "https://example.com.au"}'
+```
+
+**With custom prompt**:
+
+```bash
+agentcore invoke \
+  --runtime-name business-scraper \
+  --payload '{
+    "website": "https://example.com.au",
+    "prompt": "Focus only on finding the ABN and contact email"
+  }'
+```
+
+**Streaming invocation**:
+
+```bash
+agentcore invoke \
+  --runtime-name business-scraper \
+  --entrypoint scrape_business_streaming \
+  --payload '{"website": "https://example.com.au"}' \
+  --stream
+```
+
+#### Step 4: Monitor and Manage
+
+```bash
+# List all runtimes
+agentcore list
+
+# View logs
+agentcore logs --runtime-name business-scraper
+
+# Delete runtime when done
+agentcore delete --runtime-name business-scraper
+```
+
+#### Programmatic Invocation (Python SDK)
+
+You can also invoke the deployed runtime from your applications:
+
+```python
+import boto3
+
+client = boto3.client('bedrock-agent-runtime')
+
+response = client.invoke_agent(
+    agentId='your-runtime-id',
+    agentAliasId='your-alias-id',
+    sessionId='unique-session-id',
+    inputText='{"website": "https://example.com.au"}'
+)
 ```
 
 ### Example Session
@@ -179,14 +310,22 @@ Results saved to: business_info.json
 
 ```
 web-scraper-agent/
-├── agent.py              # Main agent script
+├── agent.py              # Main agent script (local execution)
+├── runtime_agent.py      # AgentCore Runtime version with @entrypoint
+├── example.py            # Usage examples
 ├── requirements.txt      # Python dependencies
 ├── .env.example         # Environment configuration template
+├── .gitignore           # Files to ignore in git
 ├── README.md            # This file
 └── tools/               # Custom tools directory
     ├── __init__.py
     └── validation.py    # Validation utilities (ABN, email, phone)
 ```
+
+**Key Files**:
+- **`agent.py`**: Standalone version for local testing and development
+- **`runtime_agent.py`**: Production-ready version using `@app.entrypoint` decorator for AgentCore Runtime deployment
+- **`example.py`**: Contains multiple usage examples (single site, multiple sites, validation, custom prompts)
 
 ## How It Works
 
