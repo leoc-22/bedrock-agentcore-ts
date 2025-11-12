@@ -31,26 +31,48 @@ Structured Business Data
 
 ## Deployment Options
 
-This project provides **two deployment modes**:
+The agent uses the `@app.entrypoint` decorator pattern and can be run in **two modes**:
 
-### 1. Local Execution (`agent.py`)
+### 1. Local Testing (`runtime_agent.py`)
 - **Use case**: Quick testing, development, and experimentation
-- **Runs on**: Your local machine
+- **Runs on**: Your local machine (starts HTTP server on localhost:8080)
 - **Scaling**: Single instance only
 - **Cost**: Pay only for Bedrock API calls (browser sessions + Claude invocations)
 
+**Two ways to test locally:**
+
+**Option A - Direct invocation:**
 ```bash
-python agent.py
+python runtime_agent.py https://example.com.au
 ```
 
-### 2. AgentCore Runtime Deployment (`runtime_agent.py`)
+**Option B - Local server (test with curl):**
+```bash
+# Start the server
+python runtime_agent.py
+
+# In another terminal, test with curl:
+curl -X POST http://localhost:8080/invocations \
+  -H "Content-Type: application/json" \
+  -d '{"website": "https://example.com.au"}'
+```
+
+### 2. Production Deployment (AgentCore Runtime)
 - **Use case**: Production deployments, scalable applications, API endpoints
 - **Runs on**: AWS Bedrock AgentCore Runtime (fully managed, serverless)
 - **Scaling**: Auto-scales to handle thousands of concurrent requests
 - **Cost**: Runtime hosting + Bedrock API calls
 - **Features**: Built-in monitoring, logging, session management, IAM integration
 
-Uses the `@app.entrypoint` decorator pattern:
+Deploy using the CLI toolkit:
+
+```bash
+agentcore configure
+agentcore launch --entrypoint runtime_agent.py
+agentcore invoke --payload '{"website": "https://example.com.au"}'
+```
+
+**Implementation uses `BedrockAgentCoreApp`:**
 
 ```python
 from bedrock_agentcore import BedrockAgentCoreApp
@@ -63,15 +85,7 @@ def scrape_business_handler(payload: Dict) -> Dict:
     pass
 ```
 
-Deploy using the CLI toolkit:
-
-```bash
-agentcore configure
-agentcore launch --entrypoint runtime_agent.py
-agentcore invoke --payload '{"website": "https://example.com.au"}'
-```
-
-**Recommendation**: Start with local execution for testing, then deploy to Runtime for production.
+**Recommendation**: Test locally with the built-in server, then deploy to Runtime for production.
 
 ## Prerequisites
 
@@ -156,28 +170,50 @@ agentcore invoke --payload '{"website": "https://example.com.au"}'
 
 ## Usage
 
-### Option 1: Local Execution (Quick Start)
+### Option 1: Local Testing (Quick Start)
 
-#### Basic Usage
+#### Method A: Direct Invocation
 
-Run the agent with interactive prompt:
-
-```bash
-python agent.py
-```
-
-You'll be prompted to enter a business website URL.
-
-#### With Environment Variable
-
-Set the target website in `.env`:
+Pass the website URL as a command-line argument:
 
 ```bash
-TARGET_WEBSITE=https://example.com.au
-python agent.py
+python runtime_agent.py https://example.com.au
 ```
 
-### Option 2: AgentCore Runtime Deployment (Production)
+This will directly invoke the agent and print the results.
+
+#### Method B: Local Server
+
+Start the local HTTP server:
+
+```bash
+python runtime_agent.py
+```
+
+This starts a server on `http://localhost:8080`. In another terminal, test with curl:
+
+```bash
+# Basic test
+curl -X POST http://localhost:8080/invocations \
+  -H "Content-Type: application/json" \
+  -d '{"website": "https://example.com.au"}'
+
+# With custom prompt
+curl -X POST http://localhost:8080/invocations \
+  -H "Content-Type: application/json" \
+  -d '{
+    "website": "https://example.com.au",
+    "prompt": "Focus only on finding the ABN and contact email"
+  }'
+```
+
+**Why use the server mode?**
+- Tests the same code path that runs in production
+- Allows testing the HTTP API interface
+- Can be integrated with other tools and scripts
+- Simulates the production deployment environment
+
+### Option 2: Production Deployment (AgentCore Runtime)
 
 #### Step 1: Configure AgentCore
 
@@ -310,9 +346,9 @@ Results saved to: business_info.json
 
 ```
 web-scraper-agent/
-├── agent.py              # Main agent script (local execution)
-├── runtime_agent.py      # AgentCore Runtime version with @entrypoint
+├── runtime_agent.py      # Main agent with @entrypoint (local + production)
 ├── example.py            # Usage examples
+├── deploy.sh             # Deployment helper script
 ├── requirements.txt      # Python dependencies
 ├── .env.example         # Environment configuration template
 ├── .gitignore           # Files to ignore in git
@@ -323,9 +359,11 @@ web-scraper-agent/
 ```
 
 **Key Files**:
-- **`agent.py`**: Standalone version for local testing and development
-- **`runtime_agent.py`**: Production-ready version using `@app.entrypoint` decorator for AgentCore Runtime deployment
+- **`runtime_agent.py`**: Single agent implementation using `@app.entrypoint` decorator
+  - Works for both local testing (via direct call or HTTP server) and production deployment
+  - Uses `BedrockAgentCoreApp` for consistent behavior across environments
 - **`example.py`**: Contains multiple usage examples (single site, multiple sites, validation, custom prompts)
+- **`deploy.sh`**: Bash script for easy deployment and management of the runtime
 
 ## How It Works
 

@@ -2,13 +2,16 @@
 """
 Simple example demonstrating the Business Scraper Agent.
 
-This script shows how to use the agent programmatically.
+This script shows how to use the agent programmatically by importing
+the handler function from runtime_agent.py
 """
 
 import os
 import json
 from dotenv import load_dotenv
-from agent import BusinessScraperAgent
+
+# Import the handler from runtime_agent
+from runtime_agent import scrape_business_handler
 
 # Load environment variables
 load_dotenv()
@@ -19,15 +22,12 @@ def example_single_website():
     print("Example 1: Single Website Scraping")
     print("-" * 60)
 
-    # Initialize agent
-    region = os.getenv("AWS_REGION", "us-west-2")
-    scraper = BusinessScraperAgent(region=region)
-
-    # Scrape website
+    # Scrape website by calling the handler directly
     website = "https://www.example.com.au"
     print(f"Scraping: {website}\n")
 
-    result = scraper.scrape_business(website)
+    payload = {"website": website}
+    result = scrape_business_handler(payload)
     print(json.dumps(result, indent=2))
     print("\n")
 
@@ -44,19 +44,13 @@ def example_multiple_websites():
         "https://www.example3.com.au"
     ]
 
-    # Initialize agent once
-    region = os.getenv("AWS_REGION", "us-west-2")
-    scraper = BusinessScraperAgent(region=region)
-
     # Scrape each website
     results = []
     for website in websites:
         print(f"\nScraping: {website}")
-        result = scraper.scrape_business(website)
-        results.append({
-            "website": website,
-            "data": result
-        })
+        payload = {"website": website}
+        result = scrape_business_handler(payload)
+        results.append(result)
         print("✓ Complete")
 
     # Save all results
@@ -74,29 +68,31 @@ def example_with_validation():
 
     from tools.validation import validate_abn, validate_email, format_business_data
 
-    # Initialize and scrape
-    region = os.getenv("AWS_REGION", "us-west-2")
-    scraper = BusinessScraperAgent(region=region)
-
+    # Scrape website
     website = "https://www.example.com.au"
     print(f"Scraping: {website}\n")
 
-    result = scraper.scrape_business(website)
+    payload = {"website": website}
+    result = scrape_business_handler(payload)
+
+    # Extract data from response
+    data = result.get("data", {})
 
     # Validate ABN if found
-    if result.get("abn"):
-        is_valid = validate_abn(result["abn"])
-        print(f"ABN: {result['abn']} - {'✓ Valid' if is_valid else '✗ Invalid'}")
+    if data.get("abn"):
+        is_valid = validate_abn(data["abn"])
+        print(f"ABN: {data['abn']} - {'✓ Valid' if is_valid else '✗ Invalid'}")
 
     # Validate emails if found
-    if result.get("emails"):
+    if data.get("emails"):
         print("\nEmails:")
-        for email in result["emails"]:
+        for email in data["emails"]:
             is_valid = validate_email(email)
             print(f"  {email} - {'✓ Valid' if is_valid else '✗ Invalid'}")
 
     # Format and display nicely
-    print("\n" + format_business_data(result))
+    if data:
+        print("\n" + format_business_data(data))
 
 
 def example_custom_prompt():
@@ -104,13 +100,10 @@ def example_custom_prompt():
     print("Example 4: Custom Prompt")
     print("-" * 60)
 
-    region = os.getenv("AWS_REGION", "us-west-2")
-    scraper = BusinessScraperAgent(region=region)
-
     # Custom prompt focusing on specific information
     website = "https://www.example.com.au"
-    custom_prompt = f"""
-    Please visit {website} and focus specifically on finding:
+    custom_prompt = """
+    Focus specifically on finding:
     1. The company's ABN
     2. The main contact email
     3. The business address
@@ -119,8 +112,14 @@ def example_custom_prompt():
     """
 
     print(f"Using custom prompt for: {website}\n")
-    result = scraper.agent(custom_prompt)
-    print(result)
+
+    payload = {
+        "website": website,
+        "prompt": custom_prompt
+    }
+
+    result = scrape_business_handler(payload)
+    print(json.dumps(result, indent=2))
     print("\n")
 
 

@@ -321,21 +321,39 @@ async def scrape_business_streaming(payload: Dict):
 
 # For local testing
 if __name__ == "__main__":
-    # Local testing mode
+    import sys
+
     print("Business Web Scraper - AgentCore Runtime Mode")
     print("=" * 60)
     print()
 
-    # Test payload
-    test_payload = {
-        "website": "https://www.example.com.au"
-    }
+    # Check if direct test mode (with URL argument)
+    if len(sys.argv) > 1 and sys.argv[1] != "--server":
+        # Direct invocation mode for quick testing
+        website = sys.argv[1]
+        test_payload = {"website": website}
 
-    print(f"Testing with payload: {json.dumps(test_payload, indent=2)}")
-    print()
-    print("Invoking agent...")
-    print()
+        print(f"Direct test mode")
+        print(f"Testing with: {website}")
+        print()
+        print("Invoking agent...")
+        print()
 
-    result = scrape_business_handler(test_payload)
-    print("Result:")
-    print(json.dumps(result, indent=2))
+        result = scrape_business_handler(test_payload)
+        print("Result:")
+        print(json.dumps(result, indent=2))
+    else:
+        # Server mode - starts local HTTP server
+        print("Starting local server on http://localhost:8080")
+        print()
+        print("Test with curl:")
+        print('  curl -X POST http://localhost:8080/invocations \\')
+        print('    -H "Content-Type: application/json" \\')
+        print('    -d \'{"website": "https://example.com.au"}\'')
+        print()
+        print("Press Ctrl+C to stop the server")
+        print("=" * 60)
+        print()
+
+        # Start the AgentCore local server
+        app.run()
