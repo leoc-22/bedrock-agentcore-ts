@@ -456,6 +456,61 @@ Modify `agent.py` to:
 3. **Customize extraction patterns**:
    Edit the regex patterns in `extract_business_info` function
 
+## Testing
+
+The project includes a comprehensive test suite with deterministic tests and LLM-as-a-Judge evaluation.
+
+### Running Tests
+
+```bash
+# Install test dependencies
+pip install -r requirements.txt
+
+# Run all tests
+pytest
+
+# Run only unit tests (fast)
+pytest -m unit
+
+# Run only integration tests
+pytest -m integration
+
+# Run LLM-as-a-Judge tests (requires AWS credentials)
+pytest -m llm_judge
+
+# Exclude slow tests
+pytest -m "not slow"
+```
+
+### Test Categories
+
+1. **Unit Tests**: Test individual functions (extraction, validation)
+2. **Integration Tests**: Test handlers with mocked dependencies
+3. **LLM-as-a-Judge**: Use Claude to evaluate extraction quality
+
+### LLM-as-a-Judge
+
+The test suite includes an LLM judge that evaluates:
+- **Completeness**: Did we extract all available information?
+- **Accuracy**: Is the extracted data correct?
+- **Format Quality**: Are fields properly formatted?
+- **Task Completion**: Did the agent meet all criteria?
+
+Example evaluation output:
+```json
+{
+  "overall_score": 8,
+  "completeness_score": 9,
+  "accuracy_score": 8,
+  "format_score": 9,
+  "relevance_score": 7,
+  "feedback": "Excellent extraction. All key fields captured correctly.",
+  "issues": []
+}
+```
+
+See **[tests/README.md](tests/README.md)** for detailed testing documentation.
+
 ## Troubleshooting
 
 ### Issue: "Module not found" errors
